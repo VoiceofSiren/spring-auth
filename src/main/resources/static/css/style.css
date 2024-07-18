@@ -23,7 +23,7 @@ body {
     letter-spacing: -1.08px;
 }
 
-#header-title-select-shop {
+.header-title-select-shop {
     margin-top: 20px;
     font-size: 45px;
     letter-spacing: 1.1px;
@@ -177,7 +177,7 @@ body {
     color: #ffffff;
 }
 
-#login-text {
+.login-text {
     position:absolute;
     top:48px;
     right:50px;
