@@ -45,4 +45,9 @@ public class UserController {
         return "redirect:/";
     }
     */
+
+    @GetMapping("/forbidden")
+    public String forbidden() {
+        return "forbidden";
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
+@EnableMethodSecurity(securedEnabled = true) // Controller 내부에서 @Secured를 사용할 수 있도록 지원함.
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
@@ -67,10 +69,16 @@ public class WebSecurityConfig {
                 .loginPage("/api/user/login-page").permitAll()
         );
 
-        // 필터 관리
+        // 커스텀 JWT 필터 추가
         // 순서: JwtAuthorizationFilter -> JwtAuthenticationFilter -> UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        // 접근 불가 페이지 설정
+        http
+                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                        .accessDeniedPage("/forbidden")
+        );
 
         return http.build();
     }
